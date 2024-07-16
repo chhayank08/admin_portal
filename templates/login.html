@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - SPARROW ADMIN PORTAL</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .login-container {
+      background-color: #ffffff;
+      padding: 40px; /* Increased padding for a bigger box */
+      border-radius: 10px; /* Rounded corners for a professional look */
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Box shadow for depth */
+      width: 300px; /* Adjusted width */
+    }
+    .login-container h2 {
+      margin-top: 0;
+      text-align: center;
+      color: #333333;
+      font-size: 24px; /* Larger font size for the heading */
+      margin-bottom: 20px; /* Space below the heading */
+    }
+    .login-container form {
+      display: flex;
+      flex-direction: column;
+    }
+    .login-container label {
+      margin: 10px 0 5px;
+      color: #333333; /* Darker color for labels */
+      font-weight: bold; /* Bold labels for emphasis */
+    }
+    .login-container input {
+      padding: 12px; /* Increased padding for inputs */
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none; /* Remove outline on focus */
+    }
+    .login-container button {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #333333;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease; /* Smooth background transition */
+    }
+    .login-container button:hover {
+      background-color: #555555;
+    }
+    .flash {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .flash-error {
+      background-color: #ffcccc;
+      color: #cc0000;
+      border: 1px solid #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>SPARROW ADMIN PORTAL</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form action="/login" method="POST">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" required>
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" required>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+</html>

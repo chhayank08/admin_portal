@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPARROW ADMIN PORTAL</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    /* Existing CSS styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #000;
+      padding: 5px;
+      vertical-align: top;
+      font-size: 12px;
+      padding-left: 20px;
+    }
+    .header-cell {
+      background-color: #333333;
+      color: #0d5d19;
+      text-align: center;
+      width: 100%;
+      height: 30px;
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      border-bottom: 1px solid #333333;
+    }
+    .nav-cell {
+      background-color: #333333;
+      width: 13%;
+      vertical-align: top;
+      border: none;
+      position: fixed;
+      top: 15px;
+      left: 0;
+      height: 100vh;
+    }
+    .nav-cell ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-cell li {
+      padding: 10px;
+    }
+    .nav-cell a {
+      color: #ffffff;
+      text-decoration: none;
+    }
+    .nav-cell a:hover {
+      color: #6495ed;
+    }
+    .wrapper-content-cell {
+      background-color: #f9f9f9;
+      width: 100%;
+      padding: 20px;
+      margin-top: 50px;
+      display: flex;
+      justify-content: flex-end;
+      border: none;
+      box-sizing: border-box;
+    }
+    .content-cell {
+      background-color: #ffffff;
+      width: 80%;
+      vertical-align: top;
+      padding: 20px;
+      border: 2px solid #000;
+      box-sizing: border-box;
+    }
+    .pane {
+      background-color: #3498db; /* Blue background color */
+      color: #ffffff; /* White text color */
+      padding: 10px;
+      height: 80;
+      margin-bottom: 20px; /* Spacing between pane and form */
+    }
+    .search-form {
+      margin-bottom: 20px;
+    }
+    .search-input {
+      width: 20%;
+      height: 20px;
+      font-size: 16px;
+    }
+    .search-button {
+      background-color: #ffffff;
+      color: #000000;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .search-button:hover {
+      background-color: #444444;
+    }
+    .table-header {
+      background-color: #ffffff;
+      color: #000000;
+      padding-left: 20px;
+    }
+    .content-cell table {
+      padding-left: 20px;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+      background-color: #f9f9f9;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <table>
+    <tr>
+      <td class="header-cell">
+        <span style="font-size: 24px; font-weight: bold;">SPARROW ADMIN PORTAL</span>
+      </td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td class="nav-cell">
+        <h2></h2>
+        <ul>
+          <li><i class="fas fa-cog"></i> <a href="#" id="add-inside-server">Add Inside Server</a></li>
+          <li><i class="fas fa-cog"></i> <a href="#" id="add-outside-server">Add Outside Server</a></li>
+          <li><i class="fas fa-cog"></i> <a href="#" id="inside-server-link">Inside Server List</a></li>
+          <li><i class="fas fa-cog"></i> <a href="#" id="outside-server-link">Outside Server List</a></li>
+          <li><i class="fas fa-power-off"></i> <a href="/logout">Logout</a></li>
+        </ul>
+      </td>
+      <td class="wrapper-content-cell">
+        <div class="content-cell">
+          <div class="pane">
+            <h2 id="table-title">Inside Server List</h2>
+          </div>
+          <form class="search-form">
+            <input type="text" class="search-input" name="search" placeholder="" style="height: 20px;">
+            <button type="submit" class="search-button">Search</button>
+          </form>
+          <table>
+            <thead>
+              <tr class="table-header">
+                <th>S No</th>
+                <th>Service Name</th>
+                <th>Users</th>
+                <th>Hostname</th>
+                <th>Status</th>
+                <th>URL</th>
+                <th>Server IP Public IP</th>
+                <th>Apache</th>
+                <th>Doc Server DB Server</th>
+                <th>DB Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="data-body">
+              <!-- Data will be rendered here -->
+            </tbody>
+          </table>
+          <div id="upload-form-container" style="display: none;">
+            <form id="upload-form" action="/upload" method="post" enctype="multipart/form-data">
+              <input type="file" name="file" id="file-input">
+              <button type="submit">Upload</button>
+            </form>
+          </div>
+          <button id="view-uploads-button" onclick="window.location.href='/uploads'">View Uploads</button>
+          <button id="upload-button" onclick="toggleUploadForm()">Upload</button>
+          </div>
+          
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Modal for adding server -->
+  <div id="add-server-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add Server</h2>
+      <form id="add-server-form">
+        <label for="service_name">Service Name:</label><br>
+        <input type="text" id="service_name" name="service_name" required><br><br>
+        <label for="hostname">Hostname:</label><br>
+        <input type="text" id="hostname" name="hostname" required><br><br>
+        <label for="url">URL:</label><br>
+        <input type="text" id="url" name="url" required><br><br>
+        <label for="server_ip_public_ip">Server IP Public IP:</label><br>
+        <input type="text" id="server_ip_public_ip" name="server_ip_public_ip" required><br><br>
+        <label for="apache">Apache:</label><br>
+        <input type="text" id="apache" name="apache" required><br><br>
+        <label for="doc_server_db_server">Doc Server DB Server:</label><br>
+        <input type="text" id="doc_server_db_server" name="doc_server_db_server" required><br><br>
+        <label for="db_name">DB Name:</label><br>
+        <input type="text" id="db_name" name="db_name" required><br><br>
+        <button type="submit">Add Server</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tbody = document.getElementById('data-body');
+    const addInsideServerLink = document.getElementById('add-inside-server');
+    const addOutsideServerLink = document.getElementById('add-outside-server');
+    const addServerModal = document.getElementById('add-server-modal');
+    const closeModal = document.querySelector('.close');
+
+    // Default to showing inside server list
+    fetchData('/get_data', 'Inside Server List');
+
+    // Handle click on inside server link
+    const insideServerLink = document.getElementById('inside-server-link');
+    insideServerLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      fetchData('/get_data', 'Inside Server List');
+    });
+
+    // Handle click on outside server link
+const outsideServerLink = document.getElementById('outside-server-link');
+outsideServerLink.addEventListener('click', function (event) {
+  event.preventDefault();
+  fetchData('/get_outside_data', 'Outside Server List');
+});
+
+    // Handle click on add inside server link
+    addInsideServerLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      openModal('Inside Server');
+    });
+
+    // Handle click on add outside server link
+    addOutsideServerLink.addEventListener('click', function (event) {
+      event.preventDefault();
+      openModal('Outside Server');
+    });
+
+    // Close modal on clicking the close button
+    closeModal.addEventListener('click', function () {
+      addServerModal.style.display = 'none';
+    });
+
+    // Close modal on clicking outside the modal content
+    window.addEventListener('click', function (event) {
+      if (event.target == addServerModal) {
+        addServerModal.style.display = 'none';
+      }
+    });
+
+    // Handle form submission for adding server
+    const addServerForm = document.getElementById('add-server-form');
+    addServerForm.addEventListener('submit', function (event) {
+      event.preventDefault();
+      const formData = new FormData(addServerForm);
+      const tableTitle = document.getElementById('table-title').textContent;
+
+      let url = '/add_inside_server';
+      if (tableTitle === 'Outside Server List') {
+        url = '/add_outside_server';
+      }
+
+      fetch(url, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          addServerModal.style.display = 'none';
+          fetchData(tableTitle === 'Inside Server List' ? '/get_data' : '/get_outside_server', tableTitle);
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+    });
+
+    // Fetch data from the server and render in the table
+    function fetchData(url, title) {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          tbody.innerHTML = '';
+          document.getElementById('table-title').textContent = title;
+          data.forEach((row, index) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${row.service_name}</td>
+              <td>${row.users}</td>
+              <td>${row.hostname}</td>
+              <td>${row.status}</td>
+              <td>${row.url}</td>
+              <td>${row.server_ip_public_ip}</td>
+              <td>${row.apache}</td>
+              <td>${row.doc_server_db_server}</td>
+              <td>${row.db_name}</td>
+              <td><button onclick="deleteRow(${row.id})">Delete</button></td>
+            `;
+            tbody.appendChild(tr);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }
+
+    // Open the modal and set the form action based on server type
+    function openModal(serverType) {
+      addServerModal.style.display = 'block';
+    }
+
+    // Delete row function
+    window.deleteRow = function (id) {
+      if (confirm('Are you sure you want to delete this server?')) {
+        const tableTitle = document.getElementById('table-title').textContent;
+        let url = `/delete_inside_server/${id}`;
+        if (tableTitle === 'Outside Server List') {
+          url = `/delete_outside_server/${id}`;
+        }
+
+        fetch(url, {
+          method: 'DELETE',
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            fetchData(tableTitle === 'Inside Server List' ? '/get_data' : '/get_outside_server', tableTitle);
+          })
+          .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+      }
+    };
+  });
+  </script>
+</body>
+</html>
